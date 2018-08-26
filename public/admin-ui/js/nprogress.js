@@ -211,6 +211,6 @@ layui.define(function (n) {
                 return u
             }),
             
-    layui.link("http://lottery.fishtest.ganhuoche.com/mgr.ucenter/static/admin/admin-ui/css/nprogress.css"),
+    layui.link("http://static.imlaoarc.com/public/admin/admin-ui/css/nprogress.css"),
             n("nprogress")
 });

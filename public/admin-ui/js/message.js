@@ -22,5 +22,5 @@ layui.define(["jquery"], function (i) {
             }, 3e3), e.times++;
         }};
     var link = window.location.host;
-    layui.link("http://lottery.fishtest.ganhuoche.com/mgr.ucenter/static/admin/admin-ui/css/message.css"), i("message", a);
+    layui.link("http://static.imlaoarc.com/public/admin-ui/css/message.css"), i("message", a);
 });
