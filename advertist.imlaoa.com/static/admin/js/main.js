@@ -115,14 +115,94 @@ var pro =
 
             admin_role_delete: function (id) {
                 var url = "/admin-role/delete";
-                var postData = {'id' : id};
+                var postData = {'id': id};
                 $.post(url, postData, function (data) {
-                    if (data.code === 0) {
+                    var obj = $.parseJSON(data);
+                    var msg = obj.msg;
+                    var code = obj.code;
+                    if (code === 0) {
                         alert("删除成功!");
+                        window.location.reload();
                     } else {
-                        alert(data.msg);
+                        alert(msg);
                     }
                 });
+            },
+            template_add_controller: function (type) {
+                if (type === undefined || typeof (type) === "undefined" || type === "") {
+                    var type = 0;
+                }
+                var controller_id = $("#controller_id").val();
+                var namespace = $("#namespace").val();
+                var base_class = $("#base_class").val();
+                var code_template = $("#code_template").val();
+                var actions = $("#actions").val();
+                var description = $("#description").val();
+                var url = "/template/generator-controller";
+                var postData = {'controller_id': controller_id, 'namespace': namespace, 'base_class': base_class, 'code_template': code_template, 'actions': actions, 'description': description, 'type': type};
+                $.post(url, postData, function (data) {
+                    var obj = $.parseJSON(data);
+                    var msg = obj.msg;
+                    var code = obj.code;
+                    var content = obj.data.overwrite;
+                    console.log(content);
+                    console.log(msg);
+                    if (code === 0) {
+                        $('#generator_text').val(msg);
+                        return false;
+                    }
+                    if (content === 1) {
+                        $('#generator_text').val(msg);
+                        $("#model_overwrite").css('display', 'none');
+                        $("#controller_overwrite").css('display', 'block');
+                        return false;
+                    }
+                    if (code === -1){
+                        alert(msg);
+                        return false;
+                    }
+
+
+                });
+            },
+            template_add_model: function (type) {
+                if (type === undefined || typeof (type) === "undefined" || type === "") {
+                    var type = 0;
+                }
+                var model_id = $("#model_id").val();
+                var namespace = $("#model_namespace").val();
+                var base_class = $("#model_base_class").val();
+                var code_template = $("#model_code_template").val();
+                var model_database = $("#model_database").val();
+                var description = $("#model_description").val();
+                var url = "/template/generator-model";
+                var postData = {'model_id': model_id, 'namespace': namespace, 'base_class': base_class, 'code_template': code_template, 'model_database': model_database, 'description': description, 'type': type};
+                $.post(url, postData, function (data) {
+                    var obj = $.parseJSON(data);
+                    var msg = obj.msg;
+                    var code = obj.code;
+                    var content = obj.data.overwrite;
+                    console.log(content);
+                    console.log(msg);
+                    if (code === 0) {
+                        $('#generator_text').val(msg);
+                        return false;
+                    }
+                    if (content === 1) {
+                        $('#generator_text').val(msg);
+                        $("#controller_overwrite").css('display', 'none');
+                        $("#model_overwrite").css('display', 'block');
+                        return false;
+                    }
+                    if (code === -1){
+                        alert(msg);
+                        return false;
+                    }
+                });
+            },
+            
+            clear_textarea: function () {
+                $('#generator_text').val('');
             }
 
         };
