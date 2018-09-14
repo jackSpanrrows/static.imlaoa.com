@@ -34,6 +34,107 @@ var pro =
                     return false;
                 });
             },
+
+            click_page: function (to_page, url, request_data, func) {
+                type = $("#page_contains").attr('type');
+                now_page = $("#nowpage_" + type).val();
+                if (now_page === to_page)
+                {
+                    return false;
+                }
+                if (url === '' || url === undefined)
+                {
+                    url = "/userAgent/userInfoApi";
+                }
+                if (request_data === "" || request_data === undefined)
+                {
+                    request_data = {'page': to_page, 'type': type, 'limit': 20};
+                }
+                if (func === "" || func === undefined)
+                {
+                    func = "click_page";
+                }
+                pro.page_turn(url, request_data, type, to_page, func);
+            },
+            page_turn: function (url, request_data, type, to_page, func = '') {
+                $.post(url, request_data, function (data) {
+                    obj = $.parseJSON(data);
+                    html = obj.data.html;
+                    $('#container').html("");
+                    $('#container').html(html);
+                    count = obj.data.count;
+                    page_max = obj.data.page_max;
+                    if (count > 20)
+                    {
+                        $("#page_contains").html('');
+                        var page_html = '';
+                        var middle_page = parseInt(page_max / 2);
+                        var open_page = to_page + 3;
+                        if (open_page > page_max)
+                        {
+                            open_page = page_max;
+                        }
+                        var prev_page = to_page - 3;
+                        if (prev_page < 0)
+                        {
+                            prev_page = 1;
+                        }
+                        if (func === "" || func === undefined)
+                        {
+                            func = "click_page";
+                        }
+                        for (var i = 1; i <= page_max; i++)
+                        {
+                            if (i === 1 && i !== to_page && page_max >= 10)
+                            {
+                                page_html += '<li class="sub-header btn btn-lg btn-default" onclick="pro.' + func + '(1);">首页</li>';
+                                continue;
+                            }
+                            if (i === to_page)
+                            {
+                                page_html += '<li class="sub-header btn btn-lg btn-success" onclick="pro.' + func + '(' + i + ');">' + i + '</li>';
+                                continue;
+                            }
+                            if (i >= open_page && i < page_max && page_max >= 7)
+                            {
+                                if (i === open_page)
+                                {
+                                    page_html += '<li class="sub-header btn btn-lg btn-default" onclick="pro.' + func + '(' + i + ')">...</li>';
+                                }
+                                continue;
+                            }
+                            if (i <= prev_page && i > 1 && page_max >= 7)
+                            {
+                                if (i === prev_page)
+                                {
+                                    page_html += '<li class="sub-header btn btn-lg btn-default" onclick="pro.' + func + '(' + i + ')">...</li>';
+                                }
+                                continue;
+                            }
+
+                            if (i === page_max && i !== to_page && page_max >= 10)
+                            {
+                                page_html += '<li class="sub-header btn btn-lg btn-default" onclick="pro.' + func + '(' + page_max + ');">尾页</li>';
+                                continue;
+                            }
+                            page_html += '<li class="sub-header btn btn-lg btn-default" onclick="pro.' + func + '(' + i + ');">' + i + '</li>';
+                        }
+                        page_html += "<span style='margin-left:10px;font-size:18px'>共" + count + "条数据,当前显示第" + to_page + "页</span>";
+                        $("#page_contains").html(page_html);
+                    } else {
+                        if (count !== 0)
+                        {
+                            page_html = "<span style='margin-left:10px;font-size:18px'>共" + count + "条数据,当前显示第" + to_page + "页</span>";
+                            $("#page_contains").html(page_html);
+                        }
+
+                    }
+                    $("#nowpage_" + type).val(to_page);
+                    $("#totalpage_" + type).val(page_max);
+                    return false;
+                });
+            },
+
             showCaptcha: function (captcha)
             {
                 if (captcha === "" || captcha === undefined || captcha.typeof() === "undefined")
@@ -42,6 +143,7 @@ var pro =
                     return false;
                 }
             },
+
             admin_user_add: function ()
             {
                 var admin_account = $('#admin_account').val();
@@ -67,6 +169,7 @@ var pro =
 
                 });
             },
+
             admin_user_update: function (id)
             {
                 var admin_status = $("#admin_status option:selected").val();
@@ -108,6 +211,7 @@ var pro =
                     }
                 });
             },
+
             admin_role_update: function (id)
             {
                 window.location.href = '/admin-role/edit?group_id=' + id;
@@ -128,6 +232,7 @@ var pro =
                     }
                 });
             },
+
             template_add_controller: function (type) {
                 if (type === undefined || typeof (type) === "undefined" || type === "") {
                     var type = 0;
@@ -157,7 +262,7 @@ var pro =
                         $("#controller_overwrite").css('display', 'block');
                         return false;
                     }
-                    if (code === -1){
+                    if (code === -1) {
                         alert(msg);
                         return false;
                     }
@@ -165,6 +270,7 @@ var pro =
 
                 });
             },
+
             template_add_model: function (type) {
                 if (type === undefined || typeof (type) === "undefined" || type === "") {
                     var type = 0;
@@ -194,15 +300,27 @@ var pro =
                         $("#model_overwrite").css('display', 'block');
                         return false;
                     }
-                    if (code === -1){
+                    if (code === -1) {
                         alert(msg);
                         return false;
                     }
                 });
             },
-            
+
             clear_textarea: function () {
                 $('#generator_text').val('');
+            },
+
+            show_position_category: function (to_page) {
+                $("#page_contains").html('');
+                var url = "/position-category/api-show";
+                var func = "show_position_category";
+                var request_data = {'limit': 20, 'page': to_page};
+                pro.click_page(to_page, url, request_data, func);
+            },
+            
+            position_category_info : function () {
+                window.location.href="/position-category/category-info";
             }
 
         };
