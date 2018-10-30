@@ -306,6 +306,43 @@ var pro =
                     }
                 });
             },
+            template_add_view:function(type){
+                if (type === undefined || typeof (type) === "undefined" || type === "") {
+                    var type = 0;
+                }
+                view_id = $("#view_id").val();
+                controller_view = $("#controller_view").val();
+                view_description = $("#view_description").val();
+                view_code_template = $("#view_code_template").val();
+                view_database = $("#view_database").val();
+                model_id = $("#view_model_id").val();
+                url = "/template/generator-view";
+                postData = {'view_id':view_id, 'controller_view':controller_view,'view_description':view_description, 'code_template':view_code_template, 'view_database':view_database, 'model_id':model_id, 'type':type};
+                $.post(url, postData, function(data){
+                    var obj = $.parseJSON(data);
+                    var msg = obj.msg;
+                    var code = obj.code;
+                    var content = obj.data.overwrite;
+                    console.log(content);
+                    console.log(msg);
+                    if (code === 0) {
+                        $('#generator_text').val(msg);
+                        return false;
+                    }
+                    if (content === 1) {
+                        $('#generator_text').val(msg);
+                        $("#controller_overwrite").css('display', 'none');
+                        $("#model_overwrite").css('display', 'none');
+                        $("#view_overwrite").css('display', 'block');
+                        return false;
+                    }
+                    if (code === -1) {
+                        alert(msg);
+                        return false;
+                    }
+                });
+                
+            },
 
             clear_textarea: function () {
                 $('#generator_text').val('');
@@ -318,9 +355,32 @@ var pro =
                 var request_data = {'limit': 20, 'page': to_page};
                 pro.click_page(to_page, url, request_data, func);
             },
-            
-            position_category_info : function () {
-                window.location.href="/position-category/category-info";
+
+            position_category_info: function () {
+                window.location.href = "/position-category/category-info";
+            },
+
+            position_search: function () {
+                var keywords = $('#position_search').val();
+                if (position_search === "") {
+                    alert("请输入搜索关键词");
+                    return false;
+                }
+                to_page = 1
+                var url = "/position-category/search";
+                var request_data = {'keywords': keywords};
+                var func = "show_position_category";
+                pro.click_page(to_page, url, request_data, func);
+//                $.post(url, postData, function (data) {
+//                    var obj = $.parseJSON(data);
+//                    var msg = obj.msg;
+//                    var code = obj.code;
+//                    var html = obj.data.html;
+//                    console.log(msg);
+//                    console.log(code);
+//                    console.log(html);
+//                    $("#page_contains").html('');
+//                });
             }
 
         };
