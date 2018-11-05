@@ -128,7 +128,8 @@ var pro =
                         console.log(count);
                         if (count !== 0)
                         {
-                            page_html = "<span style='margin-left:10px;font-size:18px'>共" + count + "条数据,当前显示第" + to_page + "页</span>";
+                            page_html = "";
+//                            page_html = "<span style='margin-left:10px;font-size:18px'>共" + count + "条数据,当前显示第" + to_page + "页</span>";
                             $("#page_contains").html(page_html);
                         } else {
                             page_html = "";
@@ -313,7 +314,7 @@ var pro =
                     }
                 });
             },
-            template_add_view:function(type){
+            template_add_view: function (type) {
                 if (type === undefined || typeof (type) === "undefined" || type === "") {
                     var type = 0;
                 }
@@ -324,8 +325,8 @@ var pro =
                 view_database = $("#view_database").val();
                 model_id = $("#view_model_id").val();
                 url = "/template/generator-view";
-                postData = {'view_id':view_id, 'controller_view':controller_view,'view_description':view_description, 'code_template':view_code_template, 'view_database':view_database, 'model_id':model_id, 'type':type};
-                $.post(url, postData, function(data){
+                postData = {'view_id': view_id, 'controller_view': controller_view, 'view_description': view_description, 'code_template': view_code_template, 'view_database': view_database, 'model_id': model_id, 'type': type};
+                $.post(url, postData, function (data) {
                     var obj = $.parseJSON(data);
                     var msg = obj.msg;
                     var code = obj.code;
@@ -348,7 +349,7 @@ var pro =
                         return false;
                     }
                 });
-                
+
             },
 
             clear_textarea: function () {
@@ -377,6 +378,9 @@ var pro =
                 to_page = 1;
                 var url = "/position-category/search";
                 var request_data = {'keywords': keywords, 'search_type':search_type};
+                search_type = $("#selected_keywords").val();
+                var url = "/position-category/search";
+                var request_data = {'keywords': keywords, 'search_type': search_type};
                 var func = "show_position_category";
                 pro.click_page(to_page, url, request_data, func);
 //                $.post(url, postData, function (data) {
@@ -389,6 +393,27 @@ var pro =
 //                    console.log(html);
 //                    $("#page_contains").html('');
 //                });
+            },
+            friendly_link_add: function () {
+                var web_name = $("#web_name").val();
+                var web_description = $("#web_description").val();
+                var web_url = $("#web_url").val();
+                var link_sort = $("#link_sort").val();
+                var is_show = $('input[name=is_show]:checked').val();
+                var postData = {'web_name':web_name, 'web_description':web_description, "web_url":web_url, "link_sort":link_sort, "is_show":is_show};
+                var url = "/friendly-link/ajax-save";
+                $.post(url, postData, function(data){
+                    var obj = $.parseJSON(data);
+                    var msg = obj.msg;
+                    var code = obj.code;
+                    console.log(msg);
+                    console.log(code);
+                    if (code === 0){
+                        alert(msg);
+                    } else {
+                        alert(msg);
+                    }
+                });
             }
 
         };
