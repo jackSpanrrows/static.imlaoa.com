@@ -63,6 +63,9 @@ var pro =
                     $('#container').html("");
                     $('#container').html(html);
                     count = obj.data.count;
+                    if (count === undefined || count === ""){
+                        var count = 0;
+                    }
                     page_max = obj.data.page_max;
                     if (count > 20)
                     {
@@ -122,10 +125,14 @@ var pro =
                         page_html += "<span style='margin-left:10px;font-size:18px'>共" + count + "条数据,当前显示第" + to_page + "页</span>";
                         $("#page_contains").html(page_html);
                     } else {
+                        console.log(count);
                         if (count !== 0)
                         {
                             page_html = "";
 //                            page_html = "<span style='margin-left:10px;font-size:18px'>共" + count + "条数据,当前显示第" + to_page + "页</span>";
+                            $("#page_contains").html(page_html);
+                        } else {
+                            page_html = "";
                             $("#page_contains").html(page_html);
                         }
 
@@ -363,11 +370,14 @@ var pro =
 
             position_search: function () {
                 var keywords = $('#position_search').val();
+                var search_type = $("#selected_keywords").val();
                 if (position_search === "") {
                     alert("请输入搜索关键词");
                     return false;
                 }
                 to_page = 1;
+                var url = "/position-category/search";
+                var request_data = {'keywords': keywords, 'search_type':search_type};
                 search_type = $("#selected_keywords").val();
                 var url = "/position-category/search";
                 var request_data = {'keywords': keywords, 'search_type': search_type};
