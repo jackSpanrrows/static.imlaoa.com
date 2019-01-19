@@ -404,6 +404,13 @@ var pro =
                         alert(msg);
                     }
                 });
+            },
+            show_lottery_info: function (to_page) {
+                $("#page_contains").html('');
+                var url = "/lottery-info/api-index";
+                var func = "show_lottery_info";
+                var request_data = {'limit': 20, 'page': to_page};
+                pro.click_page(to_page, url, request_data, func);
             }
 
         };
