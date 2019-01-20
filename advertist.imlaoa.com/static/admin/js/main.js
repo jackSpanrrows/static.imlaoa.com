@@ -318,14 +318,15 @@ var pro =
                 if (type === undefined || typeof (type) === "undefined" || type === "") {
                     var type = 0;
                 }
-                view_id = $("#view_id").val();
-                controller_view = $("#controller_view").val();
-                view_description = $("#view_description").val();
-                view_code_template = $("#view_code_template").val();
-                view_database = $("#view_database").val();
-                model_id = $("#view_model_id").val();
-                url = "/template/generator-view";
-                postData = {'view_id': view_id, 'controller_view': controller_view, 'view_description': view_description, 'code_template': view_code_template, 'view_database': view_database, 'model_id': model_id, 'type': type};
+                var view_id = $("#view_id").val();
+                var controller_view = $("#controller_view").val();
+                var view_description = $("#view_description").val();
+                var view_code_template = $("#view_code_template").val();
+                var view_database = $("#view_database").val();
+                var model_id = $("#view_model_id").val();
+                var url = "/template/generator-view";
+                var view_func = $("#view_func").val();
+                var postData = {'view_id': view_id, 'controller_view': controller_view, 'view_description': view_description, 'code_template': view_code_template, 'view_database': view_database, 'model_id': model_id, 'type': type, 'view_func':view_func};
                 $.post(url, postData, function (data) {
                     var obj = $.parseJSON(data);
                     var msg = obj.msg;
@@ -419,6 +420,13 @@ var pro =
                 $("#page_contains").html('');
                 var url = "/lottery-info/api-index";
                 var func = "show_lottery_info";
+                var request_data = {'limit': 20, 'page': to_page};
+                pro.click_page(to_page, url, request_data, func);
+            },
+            show_scrapy_city: function (to_page) {
+                $("#page_contains").html('');
+                var url = "/scrapy-city/api-show";
+                var func = "show_scrapy_city";
                 var request_data = {'limit': 20, 'page': to_page};
                 pro.click_page(to_page, url, request_data, func);
             }
